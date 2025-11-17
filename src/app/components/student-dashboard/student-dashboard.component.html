@@ -1,0 +1,57 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Student Dashboard</h1>
+      <div class="header-actions">
+        <span>Welcome, {{ currentUser?.name }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <div class="profile-card">
+      <div class="profile-header">
+        <h2>My Profile</h2>
+        <div class="profile-badge">Student</div>
+      </div>
+
+      <div class="profile-content" *ngIf="studentProfile">
+        <div class="profile-info">
+          <div class="info-item">
+            <label>Name:</label>
+            <span>{{ studentProfile?.name }}</span>
+          </div>
+          <div class="info-item">
+            <label>Email:</label>
+            <span>{{ studentProfile?.email }}</span>
+          </div>
+          <div class="info-item">
+            <label>Mobile:</label>
+            <span>{{ studentProfile?.mobile }}</span>
+          </div>
+          <div class="info-item">
+            <label>Date of Birth:</label>
+            <span>{{ studentProfile?.dob | date:'mediumDate' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Department:</label>
+            <span>{{ studentProfile?.department }}</span>
+          </div>
+          <div class="info-item">
+            <label>Enrollment Date:</label>
+            <span>{{ studentProfile?.createdAt | date:'mediumDate' }}</span>
+          </div>ī
+        </div>
+      </div>
+
+      <div class="loading-spinner" *ngIf="loading">
+        Loading profile...
+      </div>
+
+      <div class="empty-state" *ngIf="!studentProfile && !loading">
+        No profile information found.
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Faculty Dashboard</h1>
+      <div class="header-actions">
+        <span>Welcome, {{ currentUser?.name }}</span>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <!-- Add Student Section -->
+    <div class="add-student-section" *ngIf="showAddForm">
+      <div class="section-header">
+        <h3>Add New Student</h3>
+        <button class="btn-close" (click)="toggleAddForm()">×</button>
+      </div>
+      
+      <form [formGroup]="studentForm" (ngSubmit)="addStudent()" class="student-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" formControlName="name" class="form-control" placeholder="Enter student name">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" formControlName="email" class="form-control" placeholder="Enter student email">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Mobile</label>
+            <input type="tel" formControlName="mobile" class="form-control" placeholder="Enter mobile number">
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" formControlName="dob" class="form-control">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Department</label>
+          <input type="text" formControlName="department" class="form-control" placeholder="Enter department">
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="toggleAddForm()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="studentForm.invalid || addingStudent">
+            {{ addingStudent ? 'Adding...' : 'Add Student' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+      <button class="btn-primary" (click)="toggleAddForm()" *ngIf="!showAddForm">
+        + Add Student
+      </button>
+      <div class="stats">
+        <span class="stat-item">Total Students: {{ students.length }}</span>
+      </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="table-section">
+      <div class="table-header">
+        <h3>My Students</h3>
+        <div class="loading-spinner" *ngIf="loading">Loading...</div>
+      </div>
+
+      <div class="table-container">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>Date of Birth</th>
+              <th>Department</th>
+              <th>Created Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of students">
+              <td>{{ student.name }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.mobile }}</td>
+              <td>{{ student.dob | date:'mediumDate' }}</td>
+              <td>{{ student.department }}</td>
+              <td>{{ student.createdAt | date:'mediumDate' }}</td>
+              <td class="actions">
+                <button (click)="editStudent(student)" class="btn-edit">Edit</button>
+                <button (click)="deleteStudent(student.id)" class="btn-delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="students.length === 0 && !loading" class="empty-state">
+          No students found. Click "Add Student" to get started.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

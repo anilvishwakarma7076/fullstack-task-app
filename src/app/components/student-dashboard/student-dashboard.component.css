@@ -1,0 +1,153 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.dashboard-header {
+  background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px 0;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content h1 {
+  color: #333;
+  margin: 0;
+  font-size: 24px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-actions span {
+  color: #666;
+  font-weight: 500;
+}
+
+.logout-btn {
+  padding: 8px 16px;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-btn:hover {
+  background: #c0392b;
+}
+
+.dashboard-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.profile-card {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+.profile-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.profile-badge {
+  background: #27ae60;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.profile-info {
+  display: grid;
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #333;
+  min-width: 150px;
+}
+
+.info-item span {
+  color: #666;
+  text-align: right;
+}
+
+.loading-spinner {
+  text-align: center;
+  color: #667eea;
+  font-weight: 500;
+  padding: 40px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #666;
+  padding: 40px;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .info-item span {
+    text-align: left;
+  }
+}

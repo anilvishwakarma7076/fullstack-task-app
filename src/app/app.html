@@ -1,0 +1,14 @@
+<div class="app-container">
+  <nav class="navbar" *ngIf="currentUser">
+    <div class="nav-brand">
+      <h2>University Management</h2>
+    </div>
+    <div class="nav-user">
+      <span>Welcome, {{ currentUser.name }} ({{ currentUser.role }})</span>
+    </div>
+  </nav>
+  
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
