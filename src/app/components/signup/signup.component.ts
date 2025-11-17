@@ -59,7 +59,7 @@ export class SignupComponent {
       const { confirmPassword, ...userData } = this.signupForm.value;
 
       this.authService.signup(userData).subscribe({
-        next: (user) => {
+        next: (response) => {
           this.loading = false;
           this.success = 'Registration successful! Please wait for admin approval.';
           this.signupForm.reset();
@@ -71,7 +71,7 @@ export class SignupComponent {
         },
         error: (error) => {
           this.loading = false;
-          this.error = error;
+          this.error = error.error?.message || error.message || 'Registration failed. Please try again.';
         }
       });
     }

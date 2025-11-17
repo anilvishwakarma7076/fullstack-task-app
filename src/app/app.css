@@ -1,64 +1,10 @@
 .app-container {
   min-height: 100vh;
-}
-
-.navbar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 15px 30px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.nav-brand h2 {
-  margin: 0;
-  font-size: 20px;
-}
-
-.nav-user span {
-  font-weight: 500;
+  flex-direction: column;
 }
 
 .main-content {
   flex: 1;
-}
-
-/* Global Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  color: #333;
-}
-
-button {
-  font-family: inherit;
-}
-
-input {
-  font-family: inherit;
-}
-
-/* Utility Classes */
-.text-center {
-  text-align: center;
-}
-
-.mt-20 {
-  margin-top: 20px;
-}
-
-.mb-20 {
-  margin-bottom: 20px;
-}
-
-.hidden {
-  display: none;
+  width: 100%;
 }

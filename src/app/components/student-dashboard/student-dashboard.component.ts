@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
+import { StudentService } from '../../services/student.service';
 import { Student, User } from '../../models/user.model';
 
 @Component({
@@ -19,7 +19,7 @@ export class StudentDashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
+    private studentService: StudentService,
     private router: Router
   ) {}
 
@@ -30,7 +30,7 @@ export class StudentDashboardComponent implements OnInit {
 
   loadStudentProfile(): void {
     this.loading = true;
-    this.userService.getStudents().subscribe({
+    this.studentService.getStudents().subscribe({
       next: (students) => {
         // Find student profile by matching email
         this.studentProfile = students.find(s => s.email === this.currentUser?.email) || null;
@@ -44,7 +44,13 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.authService.clearAuthData();
+      }
+    });
   }
 }

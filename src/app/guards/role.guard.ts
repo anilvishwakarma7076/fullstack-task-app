@@ -10,16 +10,16 @@ export class RoleGuard {
 
   isAdmin(): boolean {
     const user = this.authService.currentUserValue;
-    return user?.role === UserRole.ADMIN && this.authService.validateToken(user);
+    return user?.role === UserRole.ADMIN && this.authService.validateToken();
   }
 
   isFaculty(): boolean {
     const user = this.authService.currentUserValue;
-    return user?.role === UserRole.FACULTY && this.authService.validateToken(user);
+    return user?.role === UserRole.FACULTY && this.authService.validateToken();
   }
 
   isStudent(): boolean {
     const user = this.authService.currentUserValue;
-    return user?.role === UserRole.STUDENT && this.authService.validateToken(user);
+    return user?.role === UserRole.STUDENT && this.authService.validateToken();
   }
 }

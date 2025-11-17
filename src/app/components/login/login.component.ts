@@ -32,25 +32,54 @@ export class LoginComponent {
       this.loading = true;
       this.error = '';
 
-      this.authService.login(
-        this.loginForm.value.identifier,
-        this.loginForm.value.password
-      ).subscribe({
-        next: (user) => {
-          this.loading = false;
-          if (user.role === 'admin') {
-            this.router.navigate(['/admin']);
-          } else if (user.role === 'faculty') {
-            this.router.navigate(['/faculty']);
+      const loginData = {
+        identifier: this.loginForm.value.identifier,
+        password: this.loginForm.value.password
+      };
+
+      this.authService.signin(loginData).subscribe({
+        next: (response) => {
+          // If user not in response, fetch profile
+          let user = this.authService.currentUserValue;
+          if (!user) {
+            // Fetch profile to get user data
+            this.authService.getProfile().subscribe({
+              next: (profileUser) => {
+                user = this.authService.currentUserValue;
+                this.navigateByRole(user);
+              },
+              error: (profileError) => {
+                this.loading = false;
+                console.error('Error fetching profile:', profileError);
+                this.error = 'Login successful but unable to fetch user profile';
+              }
+            });
           } else {
-            this.router.navigate(['/student']);
+            this.navigateByRole(user);
           }
         },
         error: (error) => {
           this.loading = false;
-          this.error = error;
+          console.error('Login error:', error);
+          const errorMessage = error.error?.message || error.error?.error || error.message;
+          this.error = errorMessage || 'Invalid credentials or account not approved';
         }
       });
+    }
+  }
+
+  private navigateByRole(user: any): void {
+    this.loading = false;
+    if (user) {
+      if (user.role === 'ADMIN') {
+        this.router.navigate(['/admin']);
+      } else if (user.role === 'FACULTY') {
+        this.router.navigate(['/faculty']);
+      } else {
+        this.router.navigate(['/student']);
+      }
+    } else {
+      this.error = 'Login successful but user data not found';
     }
   }
 }

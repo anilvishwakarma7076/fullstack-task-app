@@ -1,29 +1,69 @@
 export interface User {
-  id: number;
+  id?: string;
   name: string;
   email: string;
   mobile: string;
-  password: string;
+  password?: string;
   role: UserRole;
-  isApproved: boolean;
-  createdAt: Date;
+  approvalStatus?: ApprovalStatus;
+  department?: string;
+  dob?: string;
+  createdAt?: Date;
   lastLogin?: Date;
   currentToken?: string;
 }
 
 export interface Student {
-  id: number;
+  id?: string;
   name: string;
   email: string;
   mobile: string;
-  dob: Date;
+  dob: string;
   department: string;
-  facultyId: number;
-  createdAt: Date;
+  facultyId?: string;
+  createdAt?: Date;
 }
 
 export enum UserRole {
-  ADMIN = 'admin',
-  FACULTY = 'faculty',
-  STUDENT = 'student'
+  ADMIN = 'ADMIN',
+  FACULTY = 'FACULTY',
+  STUDENT = 'STUDENT'
+}
+
+export enum ApprovalStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED'
+}
+
+export interface LoginRequest {
+  identifier: string;
+  password: string;
+}
+
+export interface SignupRequest {
+  name: string;
+  email: string;
+  mobile: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: User;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface DashboardStats {
+  totalStudents?: number;
+  totalFaculties?: number;
+  pendingFaculties?: number;
+  totalUsers?: number;
 }

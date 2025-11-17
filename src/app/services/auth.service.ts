@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { User, UserRole } from '../models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { User, AuthResponse, SignupRequest, LoginRequest } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +11,12 @@ import { User, UserRole } from '../models/user.model';
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
-  private tokenKey = 'currentToken';
+  private tokenKey = 'Token';
 
-  constructor() {
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.currentUserSubject = new BehaviorSubject<User | null>(
       JSON.parse(localStorage.getItem('currentUser') || 'null')
     );
@@ -21,101 +27,73 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(identifier: string, password: string): Observable<User> {
-    // Mock API call - replace with actual API
-    return new Observable(observer => {
-      setTimeout(() => {
-        const users = this.getUsersFromStorage();
-        const user = users.find(u => 
-          (u.email === identifier || u.mobile === identifier) && 
-          u.password === password && 
-          (u.role === UserRole.ADMIN || u.isApproved)
-        );
+  public get token(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
 
-        if (user) {
-          // Invalidate previous sessions
-          this.invalidateOtherSessions(user.id);
-          
-          // Generate new token
-          const token = this.generateToken();
-          user.currentToken = token;
-          user.lastLogin = new Date();
-          
-          this.updateUserInStorage(user);
+  signup(signupData: SignupRequest): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/signup`, signupData).pipe(
+      tap((response: any) => {
+        // Signup doesn't return token, user needs admin approval
+      })
+    );
+  }
+
+  signin(loginData: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<any>(`${environment.apiUrl}/auth/login`, loginData).pipe(
+      tap((response: any) => {
+        // Handle different response formats
+        const token = response.token || response.data?.token || response.accessToken;
+        const user = response.user || response.data?.user;
+        
+        if (token) {
           localStorage.setItem(this.tokenKey, token);
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
+          console.log('Token stored in localStorage with key:', this.tokenKey);
+          console.log('Token value (first 20 chars):', token.substring(0, 20) + '...');
           
-          observer.next(user);
+          if (user) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+            console.log('User stored:', user);
+          }
         } else {
-          observer.error('Invalid credentials or account not approved');
+          console.error('No token received in signin response:', response);
         }
-        observer.complete();
-      }, 1000);
-    });
+      })
+    );
   }
 
-  signup(userData: Partial<User>): Observable<User> {
-    return new Observable(observer => {
-      setTimeout(() => {
-        const users = this.getUsersFromStorage();
-        const newUser: User = {
-          id: this.generateId(),
-          name: userData.name!,
-          email: userData.email!,
-          mobile: userData.mobile!,
-          password: userData.password!,
-          role: UserRole.FACULTY,
-          isApproved: false,
-          createdAt: new Date()
-        };
-
-        users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(users));
-        observer.next(newUser);
-        observer.complete();
-      }, 1000);
-    });
+  getProfile(): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}/auth/profile`).pipe(
+      tap((user: User) => {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+      })
+    );
   }
 
-  logout(): void {
+  logout(): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/auth/logout`, {}).pipe(
+      tap(() => {
+        this.clearAuthData();
+      })
+    );
+  }
+
+  clearAuthData(): void {
     localStorage.removeItem('currentUser');
     localStorage.removeItem(this.tokenKey);
     this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
   }
 
-  private invalidateOtherSessions(userId: number): void {
-    const users = this.getUsersFromStorage();
-    const user = users.find(u => u.id === userId);
-    if (user) {
-      user.currentToken = this.generateToken();
-      this.updateUserInStorage(user);
-    }
+  isAuthenticated(): boolean {
+    const token = this.token;
+    const user = this.currentUserValue;
+    return !!(token && user);
   }
 
-  private generateToken(): string {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
-  }
-
-  private generateId(): number {
-    return Math.floor(Math.random() * 1000000);
-  }
-
-  private getUsersFromStorage(): User[] {
-    return JSON.parse(localStorage.getItem('users') || '[]');
-  }
-
-  private updateUserInStorage(updatedUser: User): void {
-    const users = this.getUsersFromStorage();
-    const index = users.findIndex(u => u.id === updatedUser.id);
-    if (index !== -1) {
-      users[index] = updatedUser;
-      localStorage.setItem('users', JSON.stringify(users));
-    }
-  }
-
-  validateToken(user: User): boolean {
-    const storedToken = localStorage.getItem(this.tokenKey);
-    return storedToken === user.currentToken;
+  validateToken(): boolean {
+    return this.isAuthenticated();
   }
 }
