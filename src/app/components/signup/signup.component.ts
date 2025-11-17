@@ -31,6 +31,14 @@ export class SignupComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
+  getPasswordStrengthClass(): string {
+  const password = this.signupForm.get('password')?.value;
+  if (!password) return '';
+  
+  if (password.length < 6) return 'strength-weak';
+  if (password.length < 8) return 'strength-medium';
+  return 'strength-strong';
+}
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
