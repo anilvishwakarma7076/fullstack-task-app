@@ -1,59 +1,90 @@
-# AngularUsersApp
+# Fullstack Task App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+This repository contains a complete **full-stack application** with:
 
-## Development server
+- **Frontend:** Angular (inside `/frontend`)
+- **Backend:** Node.js + Express (inside `/backend`)
 
-To start a local development server, run:
+Both projects are separated for clean development, deployment, and scaling.
 
-```bash
+---
+
+## 🚀 Project Structure
+
+fullstack-task-app/
+│
+├── frontend/ # Angular application
+└── backend/ # Node.js + Express REST API
+
+yaml
+
+---
+
+# 🖥️ Frontend (Angular)
+
+The frontend application is located in the **`/frontend`** directory.
+
+### ▶️ Start Development Server
+
+
+cd frontend
 ng serve
-```
+Then open your browser:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+arduino
+http://localhost:4200/
+Angular automatically reloads on file changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
+📦 Generating Components (Frontend)
 ng generate component component-name
-```
+List all schematics:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
 ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+🏗️ Build Angular App
 ng build
-```
+Build output will be created in:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+frontend/dist/
+🔧 Backend (Node.js + Express)
+The backend API is located in the /backend folder.
+It provides:
 
-## Running unit tests
+Authentication
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+User management
 
-```bash
+Secure routes
+
+Middleware
+
+Powerful REST API endpoints
+
+▶️ Install Backend Dependencies
+cd backend
+npm install
+▶️ Start Backend Server
+npm start
+Your Backend API will run at:
+
+arduino
+http://localhost:5000/
+(or whichever port you configured)
+
+🧪 Testing
+✔ Run Angular Unit Tests
+cd frontend
 ng test
-```
+✔ Run Backend Tests (Jest or Mocha)
+cd backend
+npm test
+⚡ End-to-End Testing (Optional)
+Angular does not include e2e tools by default.
+You may install Cypress, Playwright, or WebDriver depending on your needs.
 
-## Running end-to-end tests
+📚 Additional Resources
+Angular CLI: https://angular.dev/tools/cli
 
-For end-to-end (e2e) testing, run:
+Express Documentation: https://expressjs.com/
 
-```bash
-ng e2e
-```
+Node.js Docs: https://nodejs.org
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
